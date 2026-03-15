@@ -7,7 +7,7 @@ BASE_URL = "https://api.fmcsa.dot.gov/safety/v1/carrier"
 # Explicitly defining the return type resolves the "Unknown" error
 def verify_carrier(mc_number: str) -> Dict[str, Any]:
     url = f"{BASE_URL}/{mc_number}?api_key={FMCSA_API_KEY}"
-
+    print(f"DEBUG: Verifying carrier with MC number: {FMCSA_API_KEY}")
     try:
         response = requests.get(url, timeout=10)
         

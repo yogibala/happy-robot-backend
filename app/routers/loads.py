@@ -12,25 +12,20 @@ with open(data_path) as f:
 
 
 @router.get("/search")
-def search_loads(
-    origin: Optional[str] = Query(None), destination: Optional[str] = Query(None)
+def search_loads( # type: ignore
+    origin: Optional[str] = Query(None), 
+    destination: Optional[str] = Query(None)
 ):
-    """
-    Search endpoint for the HappyRobot Search Loads Tool.
-    """
     results = []
     for load in loads_db:
-        # Simple case-insensitive search
-        match_origin = not origin or origin.lower() in load["origin"].lower()
-        match_dest = (
-            not destination or destination.lower() in load["destination"].lower()
-        )
+        # Check if the search terms are contained within the load fields
+        match_o = not origin or origin.lower() in load["origin"].lower()
+        match_d = not destination or destination.lower() in load["destination"].lower()
 
-        if match_origin and match_dest:
+        if match_o and match_d:
             results.append(load)
 
-    return results if results else {"message": "No matching loads found."}
-
+    return results if results else {"message": "No matching loads found."} # type: ignore
 
 @router.get("/{load_id}")
 def get_load(load_id: str):

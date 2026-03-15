@@ -3,7 +3,7 @@ from typing import Dict, Union
 # Configuration for Objective 1
 MAX_NEGOTIATION_ROUNDS: int = 3
 AUTO_ACCEPT_THRESHOLD: float = 0.10  # Accept if within 10% of rate
-COUNTER_OFFER_MARGIN: float = 0.05  # Counter with a 5% increase
+COUNTER_OFFER_MARGIN: float = 0.03  # Counter with a 3% increase
 
 
 def negotiate(
@@ -16,9 +16,9 @@ def negotiate(
             "decision": "reject",
             "reason": "Maximum negotiation rounds reached. Please contact a sales rep.",
         }
-
+    margin = 0.05 + (0.02 * round_number) - load_rate
     # 2. Evaluation Logic
-    max_accept_rate = load_rate * (1 + AUTO_ACCEPT_THRESHOLD)
+    max_accept_rate = load_rate * (1 + margin)
 
     if carrier_offer <= max_accept_rate:
         return {
@@ -29,7 +29,7 @@ def negotiate(
 
     # 3. Counter-Offer Logic (if not the final round)
     if round_number < MAX_NEGOTIATION_ROUNDS:
-        counter_rate = load_rate * (1 + (COUNTER_MARGIN * round_number))
+        counter_rate = load_rate * (1 + (COUNTER_OFFER_MARGIN * round_number))
         return {
             "decision": "counter",
             "counter_rate": round(counter_rate, 2),
