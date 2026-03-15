@@ -1,33 +1,39 @@
 from typing import Dict, Union
 
+# Configuration for Objective 1
 MAX_NEGOTIATION_ROUNDS: int = 3
-ACCEPTANCE_MARGIN: float = 0.15
-COUNTER_MARGIN: float = 0.05
+AUTO_ACCEPT_THRESHOLD: float = 0.10  # Accept if within 10% of rate
+COUNTER_OFFER_MARGIN: float = 0.05  # Counter with a 5% increase
 
 
 def negotiate(
-    load_rate: float,
-    carrier_offer: float,
-    round_number: int
-) -> Dict[str, Union[str, float]]:
+    load_rate: float, carrier_offer: float, round_number: int
+) -> Dict[str, Union[str, float, None]]:
 
-    max_accept_rate: float = load_rate * (1 + ACCEPTANCE_MARGIN)
+    # 1. Enforce max rounds
+    if round_number > MAX_NEGOTIATION_ROUNDS:
+        return {
+            "decision": "reject",
+            "reason": "Maximum negotiation rounds reached. Please contact a sales rep.",
+        }
+
+    # 2. Evaluation Logic
+    max_accept_rate = load_rate * (1 + AUTO_ACCEPT_THRESHOLD)
 
     if carrier_offer <= max_accept_rate:
         return {
             "decision": "accept",
-            "final_rate": carrier_offer
+            "final_rate": carrier_offer,
+            "reason": "Offer is within our acceptable range.",
         }
 
-    if round_number >= MAX_NEGOTIATION_ROUNDS:
+    # 3. Counter-Offer Logic (if not the final round)
+    if round_number < MAX_NEGOTIATION_ROUNDS:
+        counter_rate = load_rate * (1 + (COUNTER_MARGIN * round_number))
         return {
-            "decision": "reject",
-            "reason": "Max negotiation rounds reached"
+            "decision": "counter",
+            "counter_rate": round(counter_rate, 2),
+            "reason": f"Round {round_number}: We can do better than {carrier_offer}.",
         }
 
-    counter_rate: float = load_rate * (1 + COUNTER_MARGIN)
-
-    return {
-        "decision": "counter",
-        "counter_rate": round(counter_rate, 2)
-    }
+    return {"decision": "reject", "reason": "Final round reached without agreement."}

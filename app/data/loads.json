@@ -6,9 +6,10 @@
     "pickup_datetime": "2026-03-20T10:00:00",
     "delivery_datetime": "2026-03-22T18:00:00",
     "equipment_type": "Dry Van",
-    "loadboard_rate": 1200,
+    "loadboard_rate": 1200.00,
     "weight": 20000,
     "commodity_type": "Electronics",
+    "notes": "Driver must assist with unloading. No hazardous materials.",
     "miles": 960
   },
   {
@@ -18,9 +19,10 @@
     "pickup_datetime": "2026-03-21T09:00:00",
     "delivery_datetime": "2026-03-22T20:00:00",
     "equipment_type": "Reefer",
-    "loadboard_rate": 1500,
+    "loadboard_rate": 1500.00,
     "weight": 15000,
-    "commodity_type": "Food",
+    "commodity_type": "Chilled Food",
+    "notes": "Maintain temperature at 34 degrees. Appointment required.",
     "miles": 660
   }
 ]
