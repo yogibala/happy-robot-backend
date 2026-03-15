@@ -2,7 +2,7 @@ from typing import Dict, Any
 import requests
 from app.config import FMCSA_API_KEY
 
-BASE_URL = "https://api.fmcsa.dot.gov/safety/v1/carrier"
+BASE_URL = "https://api.fmcsa.dot.gov/safety/v1/carrier/docket-number"
 
 # Explicitly defining the return type resolves the "Unknown" error
 def verify_carrier(mc_number: str) -> Dict[str, Any]:
